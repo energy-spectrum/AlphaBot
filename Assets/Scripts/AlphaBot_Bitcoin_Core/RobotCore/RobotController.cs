@@ -11,27 +11,24 @@ namespace AlphaBot_Bitcoin.RobotCore
 
         private List<Commands> commands;
 
-        //Заряд батареи - Количество действий
-        private int batteryСharge;
-
-        //Нужно занести в отдельный класс, для всех роботов чтоб был доступ
+        private int batteryCharge;
 
         private Vector3 _localPositionRobot;
 
         private Directions direction;
 
-        private int numberСollectedСoins = 0;
+        private int numberCollectedCoins = 0;
 
         private Dictionary<short, List<string>> functions;
-        public void Initialization(List<string> allCode, int batteryСharge)
+        public void Initialization(List<string> allCode, int batteryCharge)
         {
             _localPositionRobot = transform.localPosition;
 
-            numberСollectedСoins = 0;
+            numberCollectedCoins = 0;
 
             direction = startDirection;
 
-            this.batteryСharge = batteryСharge;
+            this.batteryCharge = batteryCharge;
 
             _isGameOver = false;
             _conditionInIfIsTrue = false;
@@ -94,7 +91,7 @@ namespace AlphaBot_Bitcoin.RobotCore
                                 {
                                     codeBlock.RemoveAt(codeBlock.Count - 1);
                                     isBreak = true;
-                                    //Т.к. Внут цикл for и внеш делают i++. Т.е. i += 2, а нужно i += 1
+                                   
                                     i--;
                                 }
                                 
@@ -172,7 +169,6 @@ namespace AlphaBot_Bitcoin.RobotCore
             }
             for (int i = 0; i < codeBlock.Count; i++)
             {
-                //Для конструкций
                 string condition;
 
                 switch (codeBlock[i])
@@ -182,7 +178,7 @@ namespace AlphaBot_Bitcoin.RobotCore
                     case "MoveForward":
                         Commands moveCommand = Commands.MoveForward;
                         Vector3 directionOfMovement = Vector3.forward;
-                        batteryСharge--;
+                        batteryГ‘harge--;
                         switch ((Directions)((int)direction % 4))
                         {
                             case Directions.North:
@@ -215,7 +211,7 @@ namespace AlphaBot_Bitcoin.RobotCore
                         break;
 
                     case "MoveBackward":
-                        batteryСharge--;
+                        batteryCharge--;
                         if (CanExecuteCommand.CanExecute(Commands.MoveBackward, _localPositionRobot, direction + 2))
                         {
                             commands.Add(Commands.MoveBackward);
@@ -227,7 +223,7 @@ namespace AlphaBot_Bitcoin.RobotCore
                         break;
 
                     case "MoveLeft":
-                        batteryСharge--;
+                        batteryCharge--;
                         if (CanExecuteCommand.CanExecute(Commands.MoveLeft, _localPositionRobot, direction - 1))
                         {
                             commands.Add(Commands.MoveLeft);
@@ -239,7 +235,7 @@ namespace AlphaBot_Bitcoin.RobotCore
                         break;
 
                     case "MoveRight":
-                        batteryСharge--;
+                        batteryCharge--;
                         if (CanExecuteCommand.CanExecute(Commands.MoveRight, _localPositionRobot, direction + 1))
                         {
                             commands.Add(Commands.MoveRight);
@@ -251,7 +247,7 @@ namespace AlphaBot_Bitcoin.RobotCore
                         break;
                     //Turn
                     case "TurnLeft":
-                        batteryСharge--;
+                        batteryCharge--;
 
                         commands.Add(Commands.TurnLeft);
                         //direction -= 1;
@@ -260,7 +256,7 @@ namespace AlphaBot_Bitcoin.RobotCore
                         break;
 
                     case "TurnRight":
-                        batteryСharge--;
+                        batteryCharge--;
 
                         commands.Add(Commands.TurnRight);
                         //print(direction);
@@ -268,9 +264,8 @@ namespace AlphaBot_Bitcoin.RobotCore
                         //print(direction + "\n");
                         break;
                     //Jump
-                    //Доработать с изменениями localPosition and direction
                     case "Jump":
-                        batteryСharge--;
+                        batteryCharge--;
                         if (CanExecuteCommand.CanExecute(Commands.Jump, _localPositionRobot, direction))
                         {
                             if (_localPositionRobot.y < CanExecuteCommand.pos.y)
@@ -322,7 +317,7 @@ namespace AlphaBot_Bitcoin.RobotCore
                         break;
                     //Activate
                     case "Activate":
-                        batteryСharge--;
+                        batteryCharge--;
                         if (CanExecuteCommand.CanExecute(Commands.Activate, _localPositionRobot, direction))
                             commands.Add(Commands.Activate);
                         else
@@ -331,11 +326,11 @@ namespace AlphaBot_Bitcoin.RobotCore
                         break;
                     //Pick
                     case "Pick":
-                        batteryСharge--;
+                        batteryCharge--;
                         if (CanExecuteCommand.CanExecute(Commands.Pick, _localPositionRobot, direction))
                         {
                             commands.Add(Commands.Pick);
-                            numberСollectedСoins++;
+                            numberCollectedCoins++;
                         }
                         else
                             commands.Add(Commands.Ban);
@@ -370,7 +365,7 @@ namespace AlphaBot_Bitcoin.RobotCore
                         break;
                 }
 
-                if (batteryСharge == 0 || IsGameOver.IsGameOver_(_localPositionRobot, numberСollectedСoins))
+                if (batteryCharge == 0 || IsGameOver.IsGameOver_(_localPositionRobot, numberCollectedCoins))
                 {
                     _isGameOver = true;
                     return;
@@ -385,7 +380,7 @@ namespace AlphaBot_Bitcoin.RobotCore
             i += 2;
             int countBrace = 1;
 
-            for (/*self i*/; countBrace != 0; i++)
+            for (; countBrace != 0; i++)
             {
                 if (codeBlock[i] == "}")
                 {
