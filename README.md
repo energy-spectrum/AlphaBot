@@ -19,3 +19,5 @@
 - проверка прохождения уровня
 - визуализация выполнения команд роботом
 - работа с камерой
+
+[scripts](https://github.com/energy-spectrum/AlphaBot/tree/main/Assets/Scripts)
